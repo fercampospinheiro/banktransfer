@@ -44,6 +44,9 @@ public class ExtractAccount {
     @Column(name = "number_account_destination")    
     private String numberAccountDestination;
     
+    @Column(name = "value_rate")
+    private BigDecimal valueRate;
+    
     @Column(name="currency_balance")
     private BigDecimal currencyBalance;
 
@@ -53,6 +56,22 @@ public class ExtractAccount {
         this.value = value;
         this.numberAccountDestination = numberAccountDestination;
         this.currencyBalance = currencyBalance;
+    }
+    
+    public ExtractAccount(
+            Account accountMovimentation, 
+            AccountMovimentationType type, 
+            BigDecimal value, 
+            String numberAccountDestination, 
+            BigDecimal currencyBalance,
+            BigDecimal valueRate
+        ) {
+        this.accountOfMovimentation = accountMovimentation;
+        this.type = type;
+        this.value = value;
+        this.numberAccountDestination = numberAccountDestination;
+        this.currencyBalance = currencyBalance;
+        this.valueRate = valueRate;
     }
 
     public Integer getId() {

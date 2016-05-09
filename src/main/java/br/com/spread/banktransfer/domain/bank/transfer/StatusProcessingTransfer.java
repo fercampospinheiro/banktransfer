@@ -1,4 +1,4 @@
-package br.com.spread.banktransfer.domain.account.transfer;
+package br.com.spread.banktransfer.domain.bank.transfer;
 
 /**
  * @author Fernando Pinheiro

@@ -72,12 +72,16 @@ public class Account {
      * @param destination
      * @param value 
      */
-    public void transferTo(Account destination,BigDecimal value){
+    public void transferTo(Account destination,BigDecimal value,BigDecimal valueRate ){
         //possui saldo e valor dentro do limite, efetua transferência
-        if(balance.compareTo(value)>0 && value.compareTo(limit) < 0){
-            this.balance.min(value);
-            ExtractAccount extractAccount = new ExtractAccount(this, AccountMovimentationType.TRANSFER, value, destination.getNumber(), balance);
-            extracts.add(extractAccount);
+        BigDecimal valueWithRate = value.add(valueRate);
+        
+        if(balance.compareTo(valueWithRate)>0 && valueWithRate.compareTo(limit) < 0){
+            //Retira do saldo
+            this.balance.min(valueWithRate);
+            //registra movimentação no extrato
+            extracts.add( new ExtractAccount(this, AccountMovimentationType.TRANSFER, value, destination.getNumber(), value,valueRate));
+            
             destination.receiverOf(this,value);
 
         }else{
@@ -93,8 +97,8 @@ public class Account {
         //Só efetua tranfência para valores positivos
         if(value.compareTo(BigDecimal.ZERO) < 0){
             this.balance.add(value);
-            ExtractAccount extractAccount = new ExtractAccount(this, AccountMovimentationType.TRANSFER, value, origin.number, balance);
-            extracts.add(extractAccount);
+            //Registra movimentação no extrato
+            extracts.add(new ExtractAccount(this, AccountMovimentationType.TRANSFER, value, origin.number, balance));
         }else{
             throw new IllegalArgumentException("Não é posisvel trasnferir valore negativos");
         }

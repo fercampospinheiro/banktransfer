@@ -21,10 +21,11 @@ CREATE TABLE IF NOT EXISTS `bank-transfer`.holder_account (
 );
 CREATE TABLE IF NOT EXISTS `bank-transfer`.scheduled_transactions (
     id_scheduled_transactions INTEGER NOT NULL AUTO_INCREMENT,
-    dateScheduled DATETIME,
+    date_scheduled DATETIME,
     value DECIMAL(19 , 2 ),
     id_account_destination INTEGER,
     id_account_origin INTEGER,
+    operation_type VARCHAR(2),
     PRIMARY KEY (id_scheduled_transactions)
 );
 CREATE TABLE IF NOT EXISTS `bank-transfer`.extract_account (
@@ -35,6 +36,7 @@ CREATE TABLE IF NOT EXISTS `bank-transfer`.extract_account (
     value DECIMAL(19 , 2 ),
     number_account_destination VARCHAR(7),
     currency_balance DECIMAL(19,2),
+    value_rate DECIMAL(19,2),
     PRIMARY KEY (id_extract_account)
 );
 ALTER TABLE `bank-transfer`.`scheduled_transactions` 

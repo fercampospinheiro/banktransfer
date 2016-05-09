@@ -1,9 +1,10 @@
-package br.com.spread.banktransfer.domain.account.transfer;
+package br.com.spread.banktransfer.domain.bank.transfer;
 
 import br.com.spread.banktransfer.domain.account.management.AccountRespository;
 import br.com.spread.banktransfer.domain.account.management.Account;
 import br.com.spread.banktransfer.domain.bank.schedule.financial.ScheduledTransactions;
 import br.com.spread.banktransfer.domain.bank.schedule.financial.ScheduledTransactionsRepository;
+import br.com.spread.banktransfer.domain.bank.schedule.rate.CalculatorRate;
 import java.math.BigDecimal;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ public class ServiceTransferBank {
     private ScheduledTransactionsRepository transactionsRepository;
     @Autowired
     private AccountRespository accountRespository;
+    @Autowired
+    private CalculatorRate calculatorRate;
+    
     private static Integer intervalExecuteInMinutes = 0;
     
     
@@ -43,11 +47,15 @@ public class ServiceTransferBank {
     @Transactional
     private void executeTransfer(List<ScheduledTransactions> allNotProccessing){
         for (ScheduledTransactions transaction : allNotProccessing) {
+            //Obtem as contas origem e destino para excutar a transação
             Account origin = transaction.getOrigin();
             Account destination = transaction.getDestination();
-            BigDecimal valueTransfer = transaction.getValue();
             
-            origin.transferTo(destination, valueTransfer);
+            //Obtem os valores do agendamento da transação
+            BigDecimal valueTransfer = transaction.getValue();
+            BigDecimal valueRate  =  calculatorRate.calculateByTransaction(transaction);
+            
+            origin.transferTo(destination, valueTransfer,valueRate);
             transaction.setStatusProcessing(StatusProcessingTransfer.PROCESSED);
             
             accountRespository.update(origin);

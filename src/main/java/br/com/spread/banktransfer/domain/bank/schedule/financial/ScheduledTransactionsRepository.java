@@ -1,6 +1,6 @@
 package br.com.spread.banktransfer.domain.bank.schedule.financial;
 
-import br.com.spread.banktransfer.domain.account.transfer.StatusProcessingTransfer;
+import br.com.spread.banktransfer.domain.bank.transfer.StatusProcessingTransfer;
 import br.com.spread.banktransfer.infrastructure.dao.AbstractDao;
 import java.io.Serializable;
 import java.util.List;
